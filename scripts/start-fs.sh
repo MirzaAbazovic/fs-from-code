@@ -1,0 +1,1 @@
+/usr/src/freeswitch/freeswitch -u freeswitch -g freeswitch -c

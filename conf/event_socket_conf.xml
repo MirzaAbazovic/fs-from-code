@@ -1,0 +1,12 @@
+
+<!--/usr/local/freeswitch/conf/autoload_configs/event_socket.conf.xml-->
+<configuration name="event_socket.conf" description="Socket Client">
+  <settings>
+    <param name="nat-map" value="false"/>
+    <param name="listen-ip" value="::"/>
+    <param name="listen-port" value="8021"/>
+    <param name="password" value="some_strong_pass"/>
+    <!--<param name="apply-inbound-acl" value="loopback.auto"/>-->
+    <!--<param name="stop-on-bind-error" value="true"/>-->
+  </settings>
+</configuration>
