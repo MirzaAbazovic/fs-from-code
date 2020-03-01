@@ -126,12 +126,46 @@ chmod -R u=rwx,g=rx /usr/local/freeswitch/bin/*
 
 # RUN it
 
+Manually:
+
 ```/usr/local/freeswitch/bin/freeswitch- u freeswitch -g freeswitch -c```
 
+As service:
 
+You can also install it as a service by cretaing file /etc/systemd/system/freeswitch.service
+with content [freeswitch.service](conf/freeswitch.service)
+
+Relaod systemd config
+
+```systemctl daemon-reload```
+
+Start FreeSWITCH
+
+```systemctl start freeswitch```
+
+Stop FreeSWITCH:
+
+```systemctl stop freeswitch```
+
+Configure FreeSWITCH to start automatically at boot time:
+
+```systemctl enable freeswitch```
+
+To determine if FreeSWITCH is actually running, use one of these commands:
+
+```ps aux | grep freeswitch```
+
+```ps -e | grep freeswitch```
+
+Either of the above should display a line beginning with the pid (process id) of freeswitch if it is indeed running. Ignore the line that matches the grep command since it also contains the string "freeswitch".
+
+```pidof freeswitch```
+
+pidof returns the process id of the named process. In this case, if FreeSWITCH is running you will see only its pid; if it prints nothing at all, then FreeSWITCH is not running.
 
 
 # WIP
+
 in ```/usr/local/freeswitch/bin/fs_cli``` run 
 
 reload mod_event_socket
