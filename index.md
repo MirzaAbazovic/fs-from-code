@@ -25,8 +25,9 @@ apt-get update
 # Install dependencies required for the build
 apt-get build-dep freeswitch
  
-# Then let's get the source. Use the -b flag to get a specific branch
 cd /usr/src/
+# Then let's get the source. Use the -b flag to get a specific branch. For example:
+# git clone https://github.com/signalwire/freeswitch.git -bv1.10.2 freeswitch
 git clone https://github.com/signalwire/freeswitch.git freeswitch
 cd freeswitch
  
@@ -57,10 +58,8 @@ git config pull.rebase true
 ./configure
 make
 make install
- 
 # Install audio files:
 make cd-sounds-install cd-moh-install
- 
 ```
 
 ### Update
@@ -70,45 +69,6 @@ make cd-sounds-install cd-moh-install
 cd /usr/src/freeswitch
 make current
 ```
-
-Have scripts here just make them executable (and optionally edit modules.conf before install):
-
-```bash
-chmod +x prepare-fs.sh 
-chmod +x install-fs.sh 
-chmod +x update-fs.sh 
-```
-
-
-Build your own .deb Master package
-
-```bash
-apt-get update && apt-get install -yq gnupg2 wget lsb-release
-wget -O - https://files.freeswitch.org/repo/deb/debian-unstable/freeswitch_archive_g0.pub | apt-key add -
- 
-echo "deb http://files.freeswitch.org/repo/deb/debian-unstable/ `lsb_release -sc` main" > /etc/apt/sources.list.d/freeswitch.list
-echo "deb-src http://files.freeswitch.org/repo/deb/debian-unstable/ `lsb_release -sc` main" >> /etc/apt/sources.list.d/freeswitch.list
- 
-apt-get update && apt-get install -y xz-utils devscripts cowbuilder git screen
- 
-# nonstandard packages from freeswitch repo are not trusted by pbuilder !!
-echo "ALLOWUNTRUSTED=yes" >> /etc/pbuilderrc
- 
-# get the latest master. Use the -b flag to get a specific branch
-mkdir /usr/src/freeswitch-debs
-git clone https://github.com/signalwire/freeswitch.git /usr/src/freeswitch-debs/freeswitch
- 
-cd /usr/src/freeswitch-debs
-# here it's good to run screen with logging, so that you can detach from the shell prompt
-screen -L
-cd freeswitch
-./debian/util.sh build-all -aamd64 -cbuster
- 
-# here you can detach by Ctrl-a Ctrl-d and see the log files in /usr/src/freeswitch-debs/log/ folder.
-# The build may last about an hour, depending on your CPU speed.
-# If the build is successful, you will have a bunch of .deb files in /usr/src/freeswitch-debs
-```
-
 
 # Post install
 
@@ -122,6 +82,17 @@ adduser --quiet --system --home /usr/local/freeswitch --gecos "FreeSWITCH open s
 chown -R freeswitch:freeswitch /usr/local/freeswitch/
 chmod -R ug=rwX,o= /usr/local/freeswitch/
 chmod -R u=rwx,g=rx /usr/local/freeswitch/bin/*
+```
+
+
+
+**Have scripts here just make them executable (and optionally edit modules.conf before install):**
+
+```bash
+chmod +x prepare-fs.sh 
+chmod +x install-fs.sh 
+chmod +x post-install-fs.sh 
+chmod +x update-fs.sh 
 ```
 
 # RUN it
@@ -164,8 +135,11 @@ Either of the above should display a line beginning with the pid (process id) of
 pidof returns the process id of the named process. In this case, if FreeSWITCH is running you will see only its pid; if it prints nothing at all, then FreeSWITCH is not running.
 
 
-# WIP
+# Some FS modules
+## mod_event_socket
 
 in ```/usr/local/freeswitch/bin/fs_cli``` run 
 
 reload mod_event_socket
+
+## mod_http_cache
